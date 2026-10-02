@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,5 @@ Route::prefix('leads')->group(function () {
     Route::delete('/{lead}', [LeadController::class, 'destroy']);
     Route::get('/{lead}/activities', [LeadController::class, 'activities']);
 });
+
+Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
