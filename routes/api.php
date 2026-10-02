@@ -23,5 +23,9 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('leads')->group(function () {
     Route::get('/', [LeadController::class, 'index']);
+    Route::post('/', [LeadController::class, 'store']);
     Route::get('/{lead}', [LeadController::class, 'show']);
+    Route::patch('/{lead}', [LeadController::class, 'update']);
+    Route::patch('/{lead}/status', [LeadController::class, 'updateStatus']);
+    Route::delete('/{lead}', [LeadController::class, 'destroy']);
 });
