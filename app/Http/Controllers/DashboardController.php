@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use OpenApi\Attributes as OA;
 
 class DashboardController extends Controller implements HasMiddleware
 {
@@ -17,6 +18,29 @@ class DashboardController extends Controller implements HasMiddleware
         return [new Middleware('auth.jwt')];
     }
 
+    #[OA\Get(
+        path: '/api/dashboard/stats',
+        summary: 'Owner-scoped aggregates for the dashboard',
+        tags: ['Dashboard'],
+        security: [['bearerAuth' => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OK',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'total', type: 'integer'),
+                        new OA\Property(property: 'by_status', type: 'object', description: 'Count per lead_status enum case (zero-filled)'),
+                        new OA\Property(property: 'by_source', type: 'object', description: 'Count per lead_source enum case (zero-filled)'),
+                        new OA\Property(property: 'won_rate', type: 'number', format: 'float', description: 'Won / total * 100, rounded to 2 decimals'),
+                        new OA\Property(property: 'this_week', type: 'integer'),
+                        new OA\Property(property: 'this_month', type: 'integer'),
+                    ],
+                ),
+            ),
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/Error')),
+        ],
+    )]
     public function stats(Request $request): JsonResponse
     {
         $userId = $request->user()->id;

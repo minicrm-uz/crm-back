@@ -69,6 +69,16 @@ php artisan serve
 | `JWT_ACCESS_TTL` | Access token lifetime (seconds) | `900` (15 min) |
 | `JWT_REFRESH_TTL` | Refresh token lifetime (seconds) | `2592000` (30 days) |
 
+## API documentation
+
+OpenAPI 3 annotations are inline on the controllers (PHP 8 attribute syntax). To regenerate `storage/api-docs/api-docs.json`:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+Then open **http://localhost:8000/api/documentation**. In local development, set `L5_SWAGGER_GENERATE_ALWAYS=true` in `.env` so the UI reflects the latest annotations without a manual regenerate.
+
 ## Roadmap
 
 - [x] Day 1 — Scaffold: Laravel 13, Docker Compose, JWT + Swagger packages installed, PostgreSQL wired up
