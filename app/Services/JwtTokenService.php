@@ -79,6 +79,11 @@ class JwtTokenService
      */
     public function parseAccessToken(string $jwt): object
     {
+        // Align firebase/php-jwt's clock with Carbon so Laravel's travel()
+        // helper and anything else that uses Carbon::setTestNow() can
+        // deterministically produce expired tokens in tests.
+        JWT::$timestamp = Carbon::now()->getTimestamp();
+
         return JWT::decode($jwt, new Key($this->secret, $this->algo));
     }
 
