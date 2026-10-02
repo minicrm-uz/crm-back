@@ -41,7 +41,7 @@ class LeadController extends Controller implements HasMiddleware
         $lead = Lead::create([
             ...$request->validated(),
             'owner_id' => $request->user()->id,
-        ]);
+        ])->refresh();
 
         return (new LeadResource($lead))->response()->setStatusCode(201);
     }
