@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Leads\StoreLeadRequest;
 use App\Http\Requests\Leads\UpdateLeadRequest;
 use App\Http\Requests\Leads\UpdateLeadStatusRequest;
+use App\Http\Resources\LeadActivityResource;
 use App\Http\Resources\LeadResource;
 use App\Models\Lead;
 use Illuminate\Http\JsonResponse;
@@ -78,5 +79,21 @@ class LeadController extends Controller implements HasMiddleware
         $lead->delete();
 
         return response()->json([], 204);
+    }
+
+    public function activities(Request $request, Lead $lead): AnonymousResourceCollection
+    {
+        $this->authorize('view', $lead);
+
+        $perPage = min((int) $request->integer('per_page', 20), 100);
+
+        $activities = $lead->activities()
+            ->with('actor')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return LeadActivityResource::collection($activities);
     }
 }
