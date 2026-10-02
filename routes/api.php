@@ -28,4 +28,5 @@ Route::prefix('leads')->group(function () {
     Route::patch('/{lead}', [LeadController::class, 'update']);
     Route::patch('/{lead}/status', [LeadController::class, 'updateStatus']);
     Route::delete('/{lead}', [LeadController::class, 'destroy']);
+    Route::get('/{lead}/activities', [LeadController::class, 'activities']);
 });
