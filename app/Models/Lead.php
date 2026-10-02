@@ -24,6 +24,11 @@ class Lead extends Model
 
     public const SORTABLE = ['created_at', 'updated_at', 'name', 'status'];
 
+    protected $attributes = [
+        'status' => 'New',
+        'source' => 'Other',
+    ];
+
     protected function casts(): array
     {
         return [
